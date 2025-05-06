@@ -41,6 +41,7 @@ namespace BookStore
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddTransient<IMailService, MailService>();
 
             services.AddSwaggerGen(
                 option =>

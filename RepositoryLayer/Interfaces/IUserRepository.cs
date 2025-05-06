@@ -9,5 +9,9 @@ namespace RepositoryLayer.Interfaces
     public interface IUserRepository
     {
         UserEntity Register(UserRegisterModel model);
+        UserEntity Login(UserLoginModel model);
+        //ForgetPasswordModel ForgetPassword(string email);
+        UserEntity GetUserByEmail(string email);
+        bool EmailChecker(string email);
     }
 }
