@@ -10,7 +10,7 @@ using RepositoryLayer.Entity;
 
 namespace BookStore.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace BookStore.Controllers
             _mailService = mailService;
         }
 
-        [HttpPost("Register")]
+        [HttpPost]
         [AllowAnonymous]
         public IActionResult Register([FromBody] UserRegisterModel model)
         {
@@ -44,7 +44,7 @@ namespace BookStore.Controllers
             }
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         [AllowAnonymous]
         public IActionResult Login([FromBody] UserLoginModel model)
         {
@@ -53,7 +53,7 @@ namespace BookStore.Controllers
                 var result = userManager.Login(model);
                 if (result != null)
                 {
-                    return Ok(new ResponseModel<UserEntity> { IsSuccess = true, Message = "User logged in successfully", Data = result });
+                    return Ok(new ResponseModel<string> { IsSuccess = true, Message = "User logged in successfully", Data = result });
                 }
                 else
                 {
@@ -66,7 +66,7 @@ namespace BookStore.Controllers
             }
         }
 
-        [HttpPost("ForgetPassword")]
+        [HttpPost("forgot")]
         [AllowAnonymous]
         public async Task<IActionResult> ForgetPassword(string email)
         {
@@ -115,7 +115,7 @@ namespace BookStore.Controllers
             }
         }
 
-        [HttpPost("ResetPassword")]
+        [HttpPost("reset")]
         [AllowAnonymous]
         public IActionResult ResetPassword([FromBody] ResetPasswordModel model)
         {
