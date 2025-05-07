@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using CommonLayer.Models;
 using RepositoryLayer.Entity;
+using RepositoryLayer.Models;
 
 namespace RepositoryLayer.Interfaces
 {

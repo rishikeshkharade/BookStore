@@ -38,15 +38,17 @@ namespace BookStore
             services.AddControllers();
             services.AddDbContext<BookStoreDbContext>(options =>
                 options.UseSqlServer(Configuration["ConnectionStrings:DbConn"]));
-            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddTransient<IMailService, MailService>();
+            services.AddScoped<IAdminManager, AdminManager>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<MailService>();
+            services.AddScoped<TokenService>();
 
             services.AddSwaggerGen(
                 option =>
                 {
-                    option.SwaggerDoc("v1", new OpenApiInfo { Title = "BookStore API", Version = "v1" });
+                    option.SwaggerDoc("v1", new OpenApiInfo { Title = "BookStore API", Version = "v1", Description = "User & Admin Authentication APIs" });
                     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                     {
                         In = ParameterLocation.Header,

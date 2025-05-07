@@ -6,10 +6,10 @@ using RepositoryLayer.Models;
 
 namespace ManagerLayer.Interfaces
 {
-    public interface IUserManager
+    public interface IAdminManager
     {
-        UserEntity Register(UserRegisterModel model);
-        string Login(UserLoginModel model);
+        AdminEntity Register(AdminRegisterModel model);
+        string Login(AdminLoginModel model);
         ForgetPasswordModel ForgetPassword(string email);
         bool EmailChecker(string email);
         bool ResetPassword(ResetPasswordModel model);
