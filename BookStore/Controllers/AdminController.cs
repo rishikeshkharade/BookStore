@@ -78,5 +78,21 @@ namespace BookStore.Controllers
 
             return Ok(new ResponseModel<string> { IsSuccess = true, Message = "Reset token sent to admin email" });
         }
+
+        [HttpPost("reset")]
+        [AllowAnonymous]
+        public IActionResult ResetPassword([FromBody] ResetPasswordModel model)
+        {
+            if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Token) || string.IsNullOrEmpty(model.NewPassword))
+                return BadRequest(new ResponseModel<string> { IsSuccess = false, Message = "Invalid request" });
+            var isValidEmail = _adminManager.EmailChecker(model.Email);
+            if (!isValidEmail)
+                return NotFound(new ResponseModel<string> { IsSuccess = false, Message = "Admin email not found" });
+            var result = _adminManager.ResetPassword(model);
+            if (result)
+                return Ok(new ResponseModel<string> { IsSuccess = true, Message = "Password reset successfully" });
+            else
+                return BadRequest(new ResponseModel<string> { IsSuccess = false, Message = "Failed to reset password" });
+        }
     }
 }
