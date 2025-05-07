@@ -26,9 +26,16 @@ namespace ManagerLayer.Services
         {
             return _userRepository.Register(model);
         }
-        public UserEntity Login(UserLoginModel model)
+        public string Login(UserLoginModel model)
         {
-            return _userRepository.Login(model);
+            var user = _userRepository.Login(model);
+            if (user != null)
+            {
+                return _tokenService.GenerateToken(user.UserId, user.Email, user.Role);
+            }
+
+            return null;
+
         }
 
         public ForgetPasswordModel ForgetPassword(string email)
