@@ -26,50 +26,26 @@ namespace ManagerLayer.Services
         {
             return _adminRepository.Register(model);
         }
-        public string Login(AdminLoginModel model)
+        public TokenModel Login(AdminLoginModel model)
         {
-            var admin = _adminRepository.Login(model);
-            if (admin != null)
-            {
-                return _tokenService.GenerateToken(admin.AdminId, admin.Email, admin.Role);
-            }
-            return null;
+            return _adminRepository.Login(model);
         }
-        public ForgetPasswordModel ForgetPassword(string email)
+        public string ForgetPassword(string email)
         {
-            var admin = _adminRepository.GetAdminByEmail(email);
-            if (admin == null) return null;
-
-            var token = _tokenService.GenerateToken(admin.AdminId, admin.Email, admin.Role);
-
-            return new ForgetPasswordModel
-            {
-                Email = admin.Email,
-                Token = token
-            };
+            return _adminRepository.ForgetPassword(email);
         }
-        public bool EmailChecker(string email)
-        {
-            return _adminRepository.EmailChecker(email);
-        }
+        //public bool EmailChecker(string email)
+        //{
+        //    return _adminRepository.EmailChecker(email);
+        //}
         public bool ResetPassword(ResetPasswordModel model)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.ReadJwtToken(model.Token);
-            var tokenEmail = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            return _adminRepository.ResetPassword(model);
+        }
 
-            if (tokenEmail != model.Email)
-                return false;
-
-            var admin = _adminRepository.GetAdminByEmail(model.Email);
-            if (admin == null)
-                return false;
-
-            if (PasswordHelper.VerifyPassword(model.NewPassword, admin.Password))
-                return false;
-
-            var hashedPassword = PasswordHelper.HashPassword(model.NewPassword);
-            return _adminRepository.ResetPassword(model.Email, hashedPassword);
+        public TokenModel Refresh(string refreshToken)
+        {
+            return _adminRepository.Refresh(refreshToken);
         }
     }
 }

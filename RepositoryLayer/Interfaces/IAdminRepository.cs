@@ -9,9 +9,11 @@ namespace RepositoryLayer.Interfaces
     public interface IAdminRepository
     {
         AdminEntity Register(AdminRegisterModel model);
-        AdminEntity Login(AdminLoginModel model);
-        bool EmailChecker(string email);
-        bool ResetPassword(string email, string newHashedPassword);
-        AdminEntity GetAdminByEmail(string email);
+        TokenModel Login(AdminLoginModel model);
+        //bool EmailChecker(string email);
+        public string ForgetPassword(string email);
+        bool ResetPassword(ResetPasswordModel resetPasswordModel);
+        //AdminEntity GetAdminByEmail(string email);
+        public TokenModel Refresh(string refreshToken);
     }
 }

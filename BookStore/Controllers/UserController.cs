@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Entity;
+using RepositoryLayer.Interfaces;
 using RepositoryLayer.Models;
+using RepositoryLayer.Services;
 
 namespace BookStore.Controllers
 {
@@ -16,10 +18,13 @@ namespace BookStore.Controllers
     {
         private readonly IUserManager userManager;
         private readonly MailService _mailService;
-        public UserController(IUserManager userManager, MailService mailService)
+        private readonly TokenService _tokenService;
+
+        public UserController(IUserManager userManager, MailService mailService, TokenService tokenService)
         {
             this.userManager = userManager;
             _mailService = mailService;
+            _tokenService = tokenService;
         }
 
         [HttpPost]
@@ -53,7 +58,7 @@ namespace BookStore.Controllers
                 var result = userManager.Login(model);
                 if (result != null)
                 {
-                    return Ok(new ResponseModel<string> { IsSuccess = true, Message = "User logged in successfully", Data = result });
+                    return Ok(new ResponseModel<TokenModel> { IsSuccess = true, Message = "User logged in successfully", Data = result });
                 }
                 else
                 {
@@ -72,8 +77,9 @@ namespace BookStore.Controllers
         {
             try
             {
-                var userExists = userManager.EmailChecker(email);
-                if (!userExists)
+                var token = userManager.ForgetPassword(email);  // already uses TokenService
+
+                if (token == null)
                 {
                     return BadRequest(new ResponseModel<string>
                     {
@@ -82,13 +88,7 @@ namespace BookStore.Controllers
                     });
                 }
 
-                var forgetPasswordModel = userManager.ForgetPassword(email);
-
-
-                // Send reset token via email
-                
-                    var emailSent = await _mailService.SendResetTokenAsync(forgetPasswordModel.Email, forgetPasswordModel.Token);
-                //return Ok("Token generated successfully");
+                var emailSent = await _mailService.SendResetTokenAsync(email, token);
 
                 if (!emailSent)
                 {
@@ -136,5 +136,29 @@ namespace BookStore.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        [HttpPost("refresh-token")]
+        public IActionResult RefreshToken([FromBody] RefreshRequestModel model)
+        {
+            var tokenModel = userManager.Refresh(model.RefreshToken);
+
+            if (tokenModel == null)
+            {
+                return Unauthorized(new ResponseModel<string>
+                {
+                    IsSuccess = false,
+                    Message = "Invalid or expired refresh token"
+                });
+            }
+
+            return Ok(new ResponseModel<TokenModel>
+            {
+                IsSuccess = true,
+                Message = "Token refreshed successfully",
+                Data = tokenModel
+            });
+        }
+
+
     }
 }

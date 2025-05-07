@@ -51,7 +51,7 @@ namespace BookStore.Controllers
                 var result = _adminManager.Login(model);
                 if (result != null)
                 {
-                    return Ok(new ResponseModel<string> { IsSuccess = true, Message = "Admin logged in successfully", Data = result });
+                    return Ok(new ResponseModel<TokenModel> { IsSuccess = true, Message = "Admin logged in successfully", Data = result });
                 }
                 else
                 {
@@ -64,35 +64,107 @@ namespace BookStore.Controllers
             }
         }
 
-        [HttpPost("forgot")]
+        [HttpPost("forgot-password")]
         [AllowAnonymous]
-        public async Task<IActionResult> ForgetPassword(string email)
+        public async Task<IActionResult> ForgotPassword(string email)
         {
-            var data = _adminManager.ForgetPassword(email);
-            if (data == null)
-                return NotFound(new ResponseModel<string> { IsSuccess = false, Message = "Admin email not found" });
+            try
+            {
+                var token = _adminManager.ForgetPassword(email);
 
-            var success = await _mailService.SendResetTokenAsync(data.Email, data.Token);
-            if (!success)
-                return StatusCode(500, new ResponseModel<string> { IsSuccess = false, Message = "Failed to send email" });
+                if (token == null)
+                {
+                    return BadRequest(new ResponseModel<string>
+                    {
+                        IsSuccess = false,
+                        Message = "Email not registered"
+                    });
+                }
 
-            return Ok(new ResponseModel<string> { IsSuccess = true, Message = "Reset token sent to admin email" });
+                var emailSent = await _mailService.SendResetTokenAsync(email, token);
+
+                if (!emailSent)
+                {
+                    return StatusCode(500, new ResponseModel<string>
+                    {
+                        IsSuccess = false,
+                        Message = "Failed to send email"
+                    });
+                }
+
+                return Ok(new ResponseModel<string>
+                {
+                    IsSuccess = true,
+                    Message = "Reset token sent to your email"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel<string>
+                {
+                    IsSuccess = false,
+                    Message = $"Internal server error: {ex.Message}"
+                });
+            }
         }
 
-        [HttpPost("reset")]
+        
+        [HttpPost("reset-password")]
         [AllowAnonymous]
         public IActionResult ResetPassword([FromBody] ResetPasswordModel model)
         {
-            if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.Token) || string.IsNullOrEmpty(model.NewPassword))
-                return BadRequest(new ResponseModel<string> { IsSuccess = false, Message = "Invalid request" });
-            var isValidEmail = _adminManager.EmailChecker(model.Email);
-            if (!isValidEmail)
-                return NotFound(new ResponseModel<string> { IsSuccess = false, Message = "Admin email not found" });
-            var result = _adminManager.ResetPassword(model);
-            if (result)
-                return Ok(new ResponseModel<string> { IsSuccess = true, Message = "Password reset successfully" });
-            else
-                return BadRequest(new ResponseModel<string> { IsSuccess = false, Message = "Failed to reset password" });
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            bool success = _adminManager.ResetPassword(model);
+
+            if (!success)
+            {
+                return BadRequest(new ResponseModel<string>
+                {
+                    IsSuccess = false,
+                    Message = "Invalid or expired token or same as old password"
+                });
+            }
+
+            return Ok(new ResponseModel<string>
+            {
+                IsSuccess = true,
+                Message = "Password reset successful"
+            });
         }
+
+        [HttpPost("refresh-token")]
+        [AllowAnonymous]
+        public IActionResult RefreshToken([FromBody] RefreshRequestModel model)
+        {
+            if (string.IsNullOrEmpty(model.RefreshToken))
+            {
+                return BadRequest(new ResponseModel<string>
+                {
+                    IsSuccess = false,
+                    Message = "Refresh token is required"
+                });
+            }
+
+            var newTokens = _adminManager.Refresh(model.RefreshToken);
+
+            if (newTokens == null)
+            {
+                return Unauthorized(new ResponseModel<string>
+                {
+                    IsSuccess = false,
+                    Message = "Invalid or expired refresh token"
+                });
+            }
+
+            return Ok(new ResponseModel<TokenModel>
+            {
+                IsSuccess = true,
+                Message = "Token refreshed successfully",
+                Data = newTokens
+            });
+        }
+
     }
 }
