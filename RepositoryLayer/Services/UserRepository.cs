@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CommonLayer.Helpers;
-using CommonLayer.Models;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interfaces;
+using RepositoryLayer.Models;
 
 namespace RepositoryLayer.Services
 {

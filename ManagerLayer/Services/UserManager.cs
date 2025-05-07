@@ -4,19 +4,20 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using CommonLayer.Helpers;
-using CommonLayer.Models;
+using RepositoryLayer.Helpers;
 using ManagerLayer.Interfaces;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interfaces;
+using RepositoryLayer.Models;
+using RepositoryLayer.Services;
 
 namespace ManagerLayer.Services
 {
     public class UserManager : IUserManager
     {
         private readonly IUserRepository _userRepository;
-        private readonly ITokenService _tokenService;
-        public UserManager(IUserRepository userRepository, ITokenService tokenService)
+        private readonly TokenService _tokenService;
+        public UserManager(IUserRepository userRepository, TokenService tokenService)
         {
             _userRepository = userRepository;
             _tokenService = tokenService;

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using CommonLayer.Models;
 using ManagerLayer.Interfaces;
 using ManagerLayer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Entity;
+using RepositoryLayer.Models;
 
 namespace BookStore.Controllers
 {
@@ -15,8 +15,8 @@ namespace BookStore.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserManager userManager;
-        private readonly IMailService _mailService;
-        public UserController(IUserManager userManager, IMailService mailService)
+        private readonly MailService _mailService;
+        public UserController(IUserManager userManager, MailService mailService)
         {
             this.userManager = userManager;
             _mailService = mailService;
