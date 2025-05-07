@@ -114,5 +114,27 @@ namespace BookStore.Controllers
                 });
             }
         }
+
+        [HttpPost("ResetPassword")]
+        [AllowAnonymous]
+        public IActionResult ResetPassword([FromBody] ResetPasswordModel model)
+        {
+            try
+            {
+                var result = userManager.ResetPassword(model);
+                if (result)
+                {
+                    return Ok(new ResponseModel<string> { IsSuccess = true, Message = "Password reset successfully" });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { IsSuccess = false, Message = "Invalid token or email" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
     }
 }

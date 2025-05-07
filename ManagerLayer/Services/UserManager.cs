@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
 using System.Text;
+using CommonLayer.Helpers;
 using CommonLayer.Models;
 using ManagerLayer.Interfaces;
 using RepositoryLayer.Entity;
@@ -45,6 +49,33 @@ namespace ManagerLayer.Services
         public bool EmailChecker(string email)
         {
             return _userRepository.EmailChecker(email);
+        }
+
+        public bool ResetPassword(ResetPasswordModel model)
+        {
+            // Validate token (decoding and comparing email)
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.ReadJwtToken(model.Token);
+            var tokenEmail = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+
+            if (tokenEmail != model.Email)
+                return false;
+
+                var user = _userRepository.GetUserByEmail(model.Email);
+                if (user == null)
+                    return false;
+
+                // Verifies if new password is same as old one
+                bool isSame = PasswordHelper.VerifyPassword(model.NewPassword, user.Password);
+                if (isSame)
+                    return false;
+            
+
+            // Hash new password
+            var hashedPassword = PasswordHelper.HashPassword(model.NewPassword);
+
+            // Update via repository
+            return _userRepository.ResetPassword(model.Email, hashedPassword);
         }
     }
 }

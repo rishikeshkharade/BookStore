@@ -13,5 +13,6 @@ namespace RepositoryLayer.Interfaces
         //ForgetPasswordModel ForgetPassword(string email);
         UserEntity GetUserByEmail(string email);
         bool EmailChecker(string email);
+        bool ResetPassword(string email, string hashedNewPassword);
     }
 }

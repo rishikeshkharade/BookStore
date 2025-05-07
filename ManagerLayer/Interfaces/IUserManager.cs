@@ -12,5 +12,6 @@ namespace ManagerLayer.Interfaces
         UserEntity Login(UserLoginModel model);
         ForgetPasswordModel ForgetPassword(string email);
         bool EmailChecker(string email);
+        bool ResetPassword(ResetPasswordModel model);
     }
 }

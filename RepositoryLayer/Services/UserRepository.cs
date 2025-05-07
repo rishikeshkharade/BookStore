@@ -67,5 +67,17 @@ namespace RepositoryLayer.Services
         {
             return _dbContext.Users.Any(u => u.Email == email);
         }
+
+        public bool ResetPassword(string email, string hashedNewPassword)
+        {
+            var user = _dbContext.Users.FirstOrDefault(u => u.Email == email);
+            if (user != null)
+            {
+                user.Password = hashedNewPassword;
+                _dbContext.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }
