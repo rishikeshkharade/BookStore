@@ -13,7 +13,7 @@ namespace RepositoryLayer.Entity
         public int AdminId { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string Role { get; set; } = "Admin";
+        public string Role { get; set; }
 
     }
 }

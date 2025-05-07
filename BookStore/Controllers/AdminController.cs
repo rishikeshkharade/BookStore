@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using CommonLayer.Models;
+using RepositoryLayer.Models;
 using ManagerLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Entity;
+using ManagerLayer.Services;
 
 namespace BookStore.Controllers
 {
@@ -14,8 +15,8 @@ namespace BookStore.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminManager _adminManager;
-        private readonly IMailService _mailService;
-        public AdminController(IAdminManager adminManager, IMailService mailService)
+        private readonly MailService _mailService;
+        public AdminController(IAdminManager adminManager, MailService mailService)
         {
             _adminManager = adminManager;
             _mailService = mailService;
