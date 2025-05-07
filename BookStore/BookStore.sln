@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore", "BookStore.csproj", "{93EDE9DA-FA6F-4A54-9BDE-566E836BB36F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryLayer", "..\RepositoryLayer\RepositoryLayer.csproj", "{D86C6A05-115D-482A-895B-ED186378B323}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerLayer", "..\ManagerLayer\ManagerLayer.csproj", "{B7307487-16BA-4043-A4C4-CF3264C74CC4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLayer", "..\CommonLayer\CommonLayer.csproj", "{A467A9C6-FDF7-4375-8122-5C297796B28D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{B7307487-16BA-4043-A4C4-CF3264C74CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7307487-16BA-4043-A4C4-CF3264C74CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7307487-16BA-4043-A4C4-CF3264C74CC4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A467A9C6-FDF7-4375-8122-5C297796B28D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A467A9C6-FDF7-4375-8122-5C297796B28D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A467A9C6-FDF7-4375-8122-5C297796B28D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A467A9C6-FDF7-4375-8122-5C297796B28D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

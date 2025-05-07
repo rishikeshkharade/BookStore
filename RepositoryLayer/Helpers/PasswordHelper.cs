@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Org.BouncyCastle.Crypto.Generators;
 using BCrypt.Net;
 
 namespace RepositoryLayer.Helpers
