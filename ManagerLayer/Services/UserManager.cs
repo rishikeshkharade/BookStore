@@ -22,7 +22,7 @@ namespace ManagerLayer.Services
             _userRepository = userRepository;
         }
 
-        public UserEntity Register(UserRegisterModel model)
+        public UserResponseModel Register(UserRegisterModel model)
         {
             return _userRepository.Register(model);
         }

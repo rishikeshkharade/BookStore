@@ -4,6 +4,7 @@ using System.Text;
 using ManagerLayer.Interfaces;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interfaces;
+using RepositoryLayer.Models;
 
 namespace ManagerLayer.Services
 {
@@ -14,7 +15,7 @@ namespace ManagerLayer.Services
         {
             _bookRepository = bookRepository;
         }
-        public Books AddBook(Books book)
+        public Books AddBook(BookRequestModel book)
         {
             return _bookRepository.AddBook(book);
         }
@@ -30,9 +31,17 @@ namespace ManagerLayer.Services
         {
             return _bookRepository.GetBookById(bookId);
         }
-        public Books UpdateBook(int bookId, Books updatedBook)
+        public Books UpdateBook(int bookId, BookRequestModel updatedBook)
         {
             return _bookRepository.UpdateBook(bookId, updatedBook);
+        }
+        public IEnumerable<Books> SearchBooks(string keyword)
+        {
+            return _bookRepository.SearchBooks(keyword);
+        }
+        public IEnumerable<Books> SortBooks(string sortBy, string order)
+        {
+            return _bookRepository.SortBooks(sortBy, order);
         }
     }
 }

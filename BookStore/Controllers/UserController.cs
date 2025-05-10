@@ -36,7 +36,7 @@ namespace BookStore.Controllers
                 var result = userManager.Register(model);
                 if (result != null)
                 {
-                    return Ok(new ResponseModel<UserEntity> {IsSuccess = true, Message = "User registered successfully", Data = result });
+                    return Ok(new ResponseModel<UserResponseModel> { IsSuccess = true, Message = "User registered successfully", Data = result });
                 }
                 else
                 {

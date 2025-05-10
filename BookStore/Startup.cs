@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RepositoryLayer.Context;
+using RepositoryLayer.Helpers;
 using RepositoryLayer.Interfaces;
 using RepositoryLayer.Services;
 
@@ -44,6 +45,9 @@ namespace BookStore
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<MailService>();
             services.AddScoped<TokenService>();
+            services.AddScoped<IBookManager, BookManager>();
+            services.AddScoped<IBookRepository, BookRepository>();
+
 
             services.AddSwaggerGen(
                 option =>
@@ -103,13 +107,16 @@ namespace BookStore
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseAuthentication();
+            
             app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "BookStore API V1"); });
 
             app.UseRouting();
 
+            app.UseMiddleware<UnauthorizedMiddleware>();
+            
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

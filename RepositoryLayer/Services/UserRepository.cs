@@ -26,7 +26,7 @@ namespace RepositoryLayer.Services
             _tokenService = tokenService;
             _configuration = configuration;
         }
-        public UserEntity Register(UserRegisterModel model)
+        public UserResponseModel Register(UserRegisterModel model)
         {
             var user = new UserEntity
             {
@@ -38,7 +38,12 @@ namespace RepositoryLayer.Services
             };
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
-            return user;
+            return new UserResponseModel
+            {
+                FullName = user.FullName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber
+            };
         }
 
         public TokenModel Login(UserLoginModel model)

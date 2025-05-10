@@ -8,7 +8,7 @@ namespace ManagerLayer.Interfaces
 {
     public interface IUserManager
     {
-        UserEntity Register(UserRegisterModel model);
+        UserResponseModel Register(UserRegisterModel model);
         TokenModel Login(UserLoginModel model);
         public string ForgetPassword(string email);
         //bool EmailChecker(string email);

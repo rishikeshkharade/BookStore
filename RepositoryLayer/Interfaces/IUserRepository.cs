@@ -8,7 +8,7 @@ namespace RepositoryLayer.Interfaces
 {
     public interface IUserRepository
     {
-        UserEntity Register(UserRegisterModel model);
+        UserResponseModel Register(UserRegisterModel model);
         TokenModel Login(UserLoginModel model);
         public string ForgetPassword(string email);
         //UserEntity GetUserByEmail(string email);
