@@ -37,6 +37,7 @@ namespace BookStore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHttpContextAccessor();
             services.AddDbContext<BookStoreDbContext>(options =>
                 options.UseSqlServer(Configuration["ConnectionStrings:DbConn"]));
             services.AddScoped<IUserManager, UserManager>();
@@ -47,6 +48,9 @@ namespace BookStore
             services.AddScoped<TokenService>();
             services.AddScoped<IBookManager, BookManager>();
             services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<ICartManager, CartManager>();
+            services.AddScoped<ICartRepository, CartRepository>();
+
 
 
             services.AddSwaggerGen(

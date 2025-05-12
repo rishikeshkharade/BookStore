@@ -43,5 +43,9 @@ namespace ManagerLayer.Services
         {
             return _bookRepository.SortBooks(sortBy, order);
         }
+        public IEnumerable<Books> GetRecentlyAddedBooks()
+        {
+            return _bookRepository.GetRecentlyAddedBooks();
+        }
     }
 }

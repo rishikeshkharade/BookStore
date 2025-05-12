@@ -46,7 +46,7 @@ namespace RepositoryLayer.Services
             };
         }
 
-        public TokenModel Login(UserLoginModel model)
+        public UserLoginResponseModel Login(UserLoginModel model)
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.Email == model.Email);
             if (user != null && PasswordHelper.VerifyPassword(model.Password, user.Password))
@@ -60,7 +60,13 @@ namespace RepositoryLayer.Services
 
                 _dbContext.SaveChanges();
 
-                return tokenModel;
+                return new UserLoginResponseModel
+                {
+                    AccessToken = tokenModel.AccessToken,
+                    RefreshToken = tokenModel.RefreshToken,
+                    FullName = user.FullName,
+                    Email = user.Email,
+                };
             }
             return null;
         }

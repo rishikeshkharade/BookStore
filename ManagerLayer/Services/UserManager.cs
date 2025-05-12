@@ -26,7 +26,7 @@ namespace ManagerLayer.Services
         {
             return _userRepository.Register(model);
         }
-        public TokenModel Login(UserLoginModel model)
+        public UserLoginResponseModel Login(UserLoginModel model)
         {
             return _userRepository.Login(model);
         }

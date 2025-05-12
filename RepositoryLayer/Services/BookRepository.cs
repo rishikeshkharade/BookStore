@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interfaces;
@@ -12,14 +13,25 @@ namespace RepositoryLayer.Services
     public class BookRepository : IBookRepository
     {
         private readonly BookStoreDbContext _context;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
 
-        public BookRepository(BookStoreDbContext context)
+        public BookRepository(BookStoreDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            this.httpContextAccessor = httpContextAccessor;
         }
         public Books AddBook(BookRequestModel book)
         {
+            var user = httpContextAccessor.HttpContext?.User
+                       ?? throw new Exception("No HttpContext/User available");
+
+            var idClaim = user.FindFirst("Id")
+                       ?? throw new Exception("AdminId claim missing in token");
+
+            if (!int.TryParse(idClaim.Value, out var adminId))
+                throw new Exception("Invalid AdminId claim value");
+
             var newBook = new Books
             {
                 BookName = book.BookName,
@@ -29,18 +41,28 @@ namespace RepositoryLayer.Services
                 Description = book.Description,
                 BookImage = book.BookImage,
                 DiscountPrice = book.DiscountPrice,
-                CreatedAt = DateTime.Now
+                AdminId = adminId,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
 
             _context.Books.Add(newBook);
-            _context.SaveChanges();
+
+            try
+            {
+                _context.SaveChanges();
+            }catch(Microsoft.EntityFrameworkCore.DbUpdateException dbEx)
+            {
+                var sqlMessage = dbEx.InnerException?.Message ?? dbEx.Message;
+                throw new Exception("EF SaveChanges failed: " + sqlMessage, dbEx);
+            }
             return newBook;
         }
         public Books UpdateBook(int bookId, BookRequestModel updatedbook)
         {
             var book = _context.Books.FirstOrDefault(b => b.BookId == bookId);
             if (book == null) return null;
-            
+
             book.BookName = updatedbook.BookName;
             book.Author = updatedbook.AuthorName;
             book.Price = updatedbook.Price;
@@ -49,7 +71,7 @@ namespace RepositoryLayer.Services
             book.BookImage = updatedbook.BookImage;
             book.DiscountPrice = updatedbook.DiscountPrice;
             book.UpdatedAt = DateTime.Now;
-  
+
             _context.SaveChanges();
             return book;
         }
@@ -100,6 +122,13 @@ namespace RepositoryLayer.Services
                     break;
             }
             return books.ToList();
+        }
+
+        public IEnumerable<Books> GetRecentlyAddedBooks()
+        {
+            var maxDate = _context.Books.Max(b => b.CreatedAt);
+
+            return _context.Books.Where(b => b.CreatedAt == maxDate).ToList();
         }
     }
 }

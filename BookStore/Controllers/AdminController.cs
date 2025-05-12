@@ -51,7 +51,7 @@ namespace BookStore.Controllers
                 var result = _adminManager.Login(model);
                 if (result != null)
                 {
-                    return Ok(new ResponseModel<TokenModel> { IsSuccess = true, Message = "Admin logged in successfully", Data = result });
+                    return Ok(new ResponseModel<AdminLoginResponseModel> { IsSuccess = true, Message = "Admin logged in successfully", Data = result });
                 }
                 else
                 {

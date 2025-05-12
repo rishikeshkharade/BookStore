@@ -9,7 +9,7 @@ namespace ManagerLayer.Interfaces
     public interface IAdminManager
     {
         AdminEntity Register(AdminRegisterModel model);
-        TokenModel Login(AdminLoginModel model);
+        AdminLoginResponseModel Login(AdminLoginModel model);
         string ForgetPassword(string email);
         //bool EmailChecker(string email);
         bool ResetPassword(ResetPasswordModel model);

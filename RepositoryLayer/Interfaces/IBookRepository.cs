@@ -15,5 +15,6 @@ namespace RepositoryLayer.Interfaces
         IEnumerable<Books> GetAllBooks();
         IEnumerable<Books> SearchBooks(string keyword);
         IEnumerable<Books> SortBooks(string sortBy, string order);
+        IEnumerable<Books> GetRecentlyAddedBooks();
     }
 }

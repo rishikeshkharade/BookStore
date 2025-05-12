@@ -127,5 +127,20 @@ namespace BookStore.Controllers
                 return StatusCode(500, new ResponseModel<string> { IsSuccess = false, Message = $"Internal server error: {ex.Message}" });
             }
         }
+
+        [HttpGet("recent")]
+        [Authorize(Roles = "User, Admin")]
+        public IActionResult GetRecentlyAdded()
+        {
+            try
+            {
+                var books = _bookManager.GetRecentlyAddedBooks();
+                return Ok(new ResponseModel<IEnumerable<Books>> { IsSuccess = true, Message = "Recently added books retrieved successfully", Data = books });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ResponseModel<string> { IsSuccess = false, Message = $"Internal server error: {ex.Message}" });
+            }
+        }
     }
 }

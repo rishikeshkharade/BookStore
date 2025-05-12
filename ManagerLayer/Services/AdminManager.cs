@@ -26,7 +26,7 @@ namespace ManagerLayer.Services
         {
             return _adminRepository.Register(model);
         }
-        public TokenModel Login(AdminLoginModel model)
+        public AdminLoginResponseModel Login(AdminLoginModel model)
         {
             return _adminRepository.Login(model);
         }

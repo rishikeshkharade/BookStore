@@ -38,13 +38,19 @@ namespace RepositoryLayer.Services
             _dbContext.SaveChanges();
             return admin;
         }
-        public TokenModel Login(AdminLoginModel model)
+        public AdminLoginResponseModel Login(AdminLoginModel model)
         {
             var admin = _dbContext.Admins.FirstOrDefault(x => x.Email == model.Email);
 
             if (admin != null && PasswordHelper.VerifyPassword(model.Password, admin.Password))
             {
-                return _tokenService.GenerateTokens(admin.AdminId, admin.Email, admin.Role);
+                var tokenModel = _tokenService.GenerateTokens(admin.AdminId, admin.Email, admin.Role);
+                return new AdminLoginResponseModel
+                {
+                    AccessToken = tokenModel.AccessToken,
+                    RefreshToken = tokenModel.RefreshToken,
+                    Email = admin.Email
+                };
             }
 
             return null;

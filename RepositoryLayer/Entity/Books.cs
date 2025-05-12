@@ -19,6 +19,6 @@ namespace RepositoryLayer.Entity
         public string BookImage { get; set; }
         public int AdminId { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

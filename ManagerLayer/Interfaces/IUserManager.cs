@@ -9,7 +9,7 @@ namespace ManagerLayer.Interfaces
     public interface IUserManager
     {
         UserResponseModel Register(UserRegisterModel model);
-        TokenModel Login(UserLoginModel model);
+        UserLoginResponseModel Login(UserLoginModel model);
         public string ForgetPassword(string email);
         //bool EmailChecker(string email);
         bool ResetPassword(ResetPasswordModel model);
