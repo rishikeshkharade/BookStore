@@ -50,6 +50,10 @@ namespace BookStore
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<ICartManager, CartManager>();
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IWishlistManager, WishlistManager>();
+            services.AddScoped<IWishlistRepository, WishlistRepository>();
+            services.AddScoped<IOrderManager, OrderManager>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
 
 
 
